@@ -15,7 +15,7 @@ function Animal (animal) {
 //   allAnimals.push(this);
 }
 
-Animal.prototype.render = () => {
+Animal.prototype.render = function() {
   $('#cards').append('<div class="animalCard"></div>');
   let $animalCard = $('div[class="animalCard"]');
   $animalCard.html($('#photo-template').html());
@@ -24,8 +24,10 @@ Animal.prototype.render = () => {
 
   //   $animalCard.html($clonedAnimal);
   $animalCard.find('h2').text(this.title);
-  $animalCard.find('img').attr('src', this.image_url);
+  $animalCard.find('img').attr('src', this.url);
   $animalCard.find('p').text(this.description);
+  $animalCard.attr('class', this.keyword);
+  $animalCard.removeClass('animalCard');
   console.log($animalCard)
 
 }
