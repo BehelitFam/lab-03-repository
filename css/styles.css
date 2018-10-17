@@ -1,0 +1,48 @@
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    width: 100%;
+}
+
+header {
+    background-color: rgb(208, 239, 247);
+    font-size: 2em;
+    height: 4em;
+    text-align: center;
+    width: 100%;
+}
+
+header select {
+    display: inline;
+    margin: 0 auto;
+    vertical-align: bottom;
+}
+
+main {
+    background-color: rgb(233, 228, 224);
+    padding: 3em auto;
+}
+
+.deck {
+    overflow: hidden;
+    text-align: center;
+}
+
+.animalCard {
+    background-color: rgb(253, 253, 253);
+    border-radius: 5px;
+    float: left;
+    height: 8em;
+    margin: 2em;
+    width: 10em;
+}
+
+.animalImg {
+    height: 4em;
+    width: auto;
+}

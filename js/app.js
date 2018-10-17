@@ -15,6 +15,7 @@ function Animal (animal) {
 //   allAnimals.push(this);
 }
 
+
 Animal.prototype.render = function() {
   $('#cards').append('<div class="animalCard"></div>');
   let $animalCard = $('div[class="animalCard"]');
@@ -33,6 +34,7 @@ Animal.prototype.render = function() {
 }
 
 function filterAnimals(keyword) {
+
   const chosenAnimals = [];
   allAnimals.forEach(animal => {
     if (animal.keyword === keyword) {
@@ -61,18 +63,25 @@ function renderFilter() {
   });
 }
 
+function renderAnimals(animals) {
+    $('#cards').empty();
+    animals.forEach(animal => {
+        animal.render();
+    });
+}
+
 const loadAnimals = () => {
   $.get('../data/page-1.json')
     .then(data => {
       data.forEach(animal => {
         allAnimals.push(new Animal(animal));
       });
-    //   renderFilter();
+      renderFilter();
       renderAnimals(allAnimals);
-    });
 
-  
+    });
 }
+
 
 function renderAnimals(animals) {
 //   $('#cards').empty();
@@ -83,3 +92,4 @@ function renderAnimals(animals) {
 
 // loadAnimals();
 $(() => loadAnimals());
+
