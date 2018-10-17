@@ -1,5 +1,6 @@
 * {
     box-sizing: border-box;
+    font-family: 'Eater';
 }
 
 html, body {
@@ -34,15 +35,29 @@ main {
 }
 
 .animalCard {
-    background-color: rgb(253, 253, 253);
+    background-color: rgb(202, 202, 202);
     border-radius: 5px;
     float: left;
-    height: 8em;
-    margin: 2em;
-    width: 10em;
+    height: 10em;
+    margin: 1em;
+    position: relative;
+    text-align: center;
+    width: 12em;
 }
 
 .animalCard img {
     height: 4em;
     width: auto;
+}
+
+.animalCard h2, p {
+    background-color: rgb(243, 243, 243);
+    border-radius: 2px;
+    color: rgb(71, 71, 71);
+}
+
+.animalCard p {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
 }

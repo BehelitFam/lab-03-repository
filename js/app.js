@@ -50,7 +50,6 @@ function renderFilter() {
     $('#filter').append(`<option value=${keyword}>${keyword}</option>`);
   });
   $('#filter').on('change', function() {
-    console.log(this.value);
     renderAnimals(filterAnimals(this.value));
     if (this.value === 'default'){
       renderAnimals(allAnimals);
@@ -58,12 +57,6 @@ function renderFilter() {
   });
 }
 
-function renderAnimals(animals) {
-    $('#cards').empty();
-    animals.forEach(animal => {
-        animal.render();
-    });
-}
 
 function loadAnimals() {
   $.get('../data/page-1.json').then(data => {
@@ -78,7 +71,7 @@ function loadAnimals() {
 
 
 function renderAnimals(animals) {
-//   $('#cards').empty();
+  $('#cards').empty();
   animals.forEach(animal => {
     animal.render();
   });
