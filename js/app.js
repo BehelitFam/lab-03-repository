@@ -18,11 +18,12 @@ function Animal (animal) {
 Animal.prototype.render = () => {
     $('#cards').append('<div class="animalCard"></div>');
     const $animalCard = $('.animalCard:last');
-    console.log($animalCard);
+
 }
 
 function filterAnimals(keyword) {
     const chosenAnimals = [];
+    if (keyword = "All")
     allAnimals.forEach(animal => {
         if (animal.keyword === keyword) {
             chosenAnimals.push(animal);
@@ -47,6 +48,13 @@ function renderFilter() {
     });
 }
 
+function renderAnimals(animals) {
+    $('#cards').empty();
+    animals.forEach(animal => {
+        animal.render();
+    });
+}
+
 const loadAnimals = () => {
     $.get('data/page-1.json', function(data) {
         data.forEach(animal => {
@@ -54,14 +62,8 @@ const loadAnimals = () => {
         });
         console.log(allAnimals);
         renderFilter();
+        renderAnimals(allAnimals);
     });
-}
-
-function renderAnimals(animals) {
-    $('#cards').empty();
-    animals.forEach(animal => {
-        animal.render();
-    })
 }
 
 loadAnimals();
