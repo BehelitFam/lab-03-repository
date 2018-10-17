@@ -5,47 +5,62 @@ const allKeywords = [];
 
 
 function Animal (animal) {
-    this.url = animal.image_url;
-    this.title = animal.title;
-    this.description = animal.description;
-    this.keyword = animal.keyword;
-    this.horns = animal.horns;
+  this.url = animal.image_url;
+  this.title = animal.title;
+  this.description = animal.description;
+  this.keyword = animal.keyword;
+  this.horns = animal.horns;
 
-    addKeyword(this.keyword);
-    allAnimals.push(this);
+  addKeyword(this.keyword);
+//   allAnimals.push(this);
 }
 
-Animal.prototype.render = () => {
-    $('#cards').append('<div class="animalCard"></div>');
-    const $animalCard = $('.animalCard:last');
+
+Animal.prototype.render = function() {
+  $('#cards').append('<div class="animalCard"></div>');
+  let $animalCard = $('div[class="animalCard"]');
+  $animalCard.html($('#photo-template').html());
+
+  //   let $clonedAnimal = $('#phone-template').html();
+
+  //   $animalCard.html($clonedAnimal);
+  $animalCard.find('h2').text(this.title);
+  $animalCard.find('img').attr('src', this.url);
+  $animalCard.find('p').text(this.description);
+  $animalCard.attr('class', this.keyword);
+  $animalCard.removeClass('animalCard');
+  console.log($animalCard)
 
 }
 
 function filterAnimals(keyword) {
-    const chosenAnimals = [];
-    if (keyword = "All")
-    allAnimals.forEach(animal => {
-        if (animal.keyword === keyword) {
-            chosenAnimals.push(animal);
-        }
-    });
-    return chosenAnimals;
+
+  const chosenAnimals = [];
+  allAnimals.forEach(animal => {
+    if (animal.keyword === keyword) {
+      chosenAnimals.push(animal);
+    }
+  });
+  return chosenAnimals;
 }
 
 function addKeyword(keyword) {
-    if (!allKeywords.includes(keyword)) {
-        allKeywords.push(keyword);
-    }
+  if (!allKeywords.includes(keyword)) {
+    allKeywords.push(keyword);
+  }
 }
 
 function renderFilter() {
-    allKeywords.forEach(keyword => {
-        $('#filter').append(`<option value=${keyword}>${keyword}</option>`);
-    });
-    $('#filter').on('change', function() {
-        console.log(this.value);
-        renderAnimals(filterAnimals(this.value));
-    });
+  allKeywords.forEach(keyword => {
+    $('#filter').append(`<option value=${keyword}>${keyword}</option>`);
+  });
+  $('#filter').on('change', function() {
+    console.log(this.value);
+    renderAnimals(filterAnimals(this.value));
+    if (this.value === 'default'){
+      renderAnimals(allAnimals);
+    }
+  });
 }
 
 function renderAnimals(animals) {
@@ -56,14 +71,25 @@ function renderAnimals(animals) {
 }
 
 const loadAnimals = () => {
-    $.get('data/page-1.json', function(data) {
-        data.forEach(animal => {
-            new Animal(animal);
-        });
-        console.log(allAnimals);
-        renderFilter();
-        renderAnimals(allAnimals);
+  $.get('../data/page-1.json')
+    .then(data => {
+      data.forEach(animal => {
+        allAnimals.push(new Animal(animal));
+      });
+      renderFilter();
+      renderAnimals(allAnimals);
+
     });
 }
 
-loadAnimals();
+
+function renderAnimals(animals) {
+//   $('#cards').empty();
+  animals.forEach(animal => {
+    animal.render();
+  })
+}
+
+// loadAnimals();
+$(() => loadAnimals());
+
