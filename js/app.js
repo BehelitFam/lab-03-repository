@@ -55,31 +55,32 @@ function renderFilter() {
     }
   });
   jsonDataLinks.forEach((link, index) => {
-    $('#pageButtons').append(`<button type="button" value=${link}>Animal Set ${index}</button>`);
+    $('#pageButtons').append(`<button type="button" value=${index}>Animal Set ${index + 1}</button>`);
   });
   $('#pageButtons').on('click', event => {
-    animalsOnPage = event.target.value;
+    animalsOnPage = animalDataSets[event.target.value];
+    console.log(animalsOnPage);
     renderAnimals(animalsOnPage);
   });
 
 }
 
 function loadAnimals() {
-  jsonDataLinks.forEach(dataLink => {
+  let loaded = 0;
+  jsonDataLinks.forEach((dataLink, index) => {
     $.get(dataLink).then(data => {
-      console.log(dataLink);
+      loaded++;
       const animalSet = [];
       data.forEach(animal => {
         animalSet.push(new Animal(animal));
       });
-      console.log(animalSet);
-      animalDataSets.push(animalSet);
-      console.log(animalDataSets);
+      animalDataSets[index] = (animalSet);
+      if (loaded >= jsonDataLinks.length) {
+        animalsOnPage = animalDataSets[0];
+        renderFilter();
+        renderAnimals(animalsOnPage);
+      }
     });
-  }).then(() => {
-    animalsOnPage = animalDataSets[0];
-    //renderFilter();
-    renderAnimals(animalsOnPage);
   });
 }
 
