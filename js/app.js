@@ -55,12 +55,16 @@ function renderFilter() {
     }
   });
   jsonDataLinks.forEach((link, index) => {
-    $('#pageButtons').append(`<button type="button" value=${index}>Animal Set ${index + 1}</button>`);
+    $('#pageButtons').append(`<button type="button" value=${index}>Animal Set ${index}</button>`);
   });
   $('#pageButtons').on('click', event => {
-    animalsOnPage = animalDataSets[event.target.value];
-    console.log(animalsOnPage);
-    renderAnimals(animalsOnPage);
+    event.preventDefault();
+    if (event.target.value) {
+      $('#filter').val('default');
+      animalsOnPage = animalDataSets[event.target.value];
+      console.log(animalsOnPage);
+      renderAnimals(animalsOnPage);
+    }
   });
 
 }
@@ -74,7 +78,7 @@ function loadAnimals() {
       data.forEach(animal => {
         animalSet.push(new Animal(animal));
       });
-      animalDataSets[index] = (animalSet);
+      animalDataSets.push(animalSet);
       if (loaded >= jsonDataLinks.length) {
         animalsOnPage = animalDataSets[0];
         renderFilter();
