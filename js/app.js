@@ -1,9 +1,11 @@
 'use strict';
 
-const allAnimals = [];
+const jsonDataLinks = ['../data/page-1.json', '../data/page-2.json'];
+const animalDataSets = [];
+let animalsOnPage = [];
 const allKeywords = [];
-const source = $('#card-template').html();
-const template = Handlebars.compile(source);
+const template = Handlebars.compile($('#card-template').html());
+const js
 
 function Animal (animal) {
   this.url = animal.image_url;
@@ -13,32 +15,15 @@ function Animal (animal) {
   this.horns = animal.horns;
 
   addKeyword(this.keyword);
-  //allAnimals.push(this);
 }
 
 Animal.prototype.render = function() {
-  
   $('#cards').append(template(this));
-
-
-
-
-  // $('#cards').append('<div class="clone"></div>');
-  // let $animalCard = $('div[class="clone"]');
-  // $animalCard.html($('#card-template').html());
-
-  // $animalCard.find('h2').text(this.title);
-  // $animalCard.find('img').attr('src', this.url);
-  // $animalCard.find('p').text(this.description);
-  // $animalCard.attr('class', 'animalCard ' + this.keyword);
-  // console.log($animalCard.find('h2').text());
-
 }
 
 function filterAnimals(keyword) {
-
   const chosenAnimals = [];
-  allAnimals.forEach(animal => {
+  animalsOnPage.forEach(animal => {
     if (animal.keyword === keyword) {
       chosenAnimals.push(animal);
     }
@@ -57,25 +42,30 @@ function renderFilter() {
     $('#filter').append(`<option value=${keyword}>${keyword}</option>`);
   });
   $('#filter').on('change', function() {
-    renderAnimals(filterAnimals(this.value));
     if (this.value === 'default'){
-      renderAnimals(allAnimals);
+      renderAnimals(animalsOnPage);
+    } else {
+      renderAnimals(filterAnimals(this.value));
     }
   });
 }
 
-
 function loadAnimals() {
-  $.get('../data/page-1.json').then(data => {
-    data.forEach(animal => {
-      allAnimals.push(new Animal(animal));
+  jsonDataLinks.forEach(dataLink => {
+    $.get(dataLink).then(data => {
+      const animalSet = [];
+      data.forEach(animal => {
+        animalSet.push(new Animal(animal));
+      });
+      animalDataSets.push(animalSet);
     });
+  }).then(() => {
+    animalsOnPage = animalDataSets[0];
     renderFilter();
-    renderAnimals(allAnimals);
-
+    renderDataButtons();
+    renderAnimals(animalsOnPage);
   });
 }
-
 
 function renderAnimals(animals) {
   $('#cards').empty();
@@ -84,7 +74,6 @@ function renderAnimals(animals) {
   });
 }
 
-// loadAnimals();
 $(() => loadAnimals());
 
 
