@@ -5,7 +5,6 @@ const animalDataSets = [];
 let animalsOnPage = [];
 const allKeywords = [];
 const template = Handlebars.compile($('#card-template').html());
-const js
 
 function Animal (animal) {
   this.url = animal.image_url;
@@ -21,6 +20,12 @@ Animal.prototype.render = function() {
   $('#cards').append(template(this));
 }
 
+function addKeyword(keyword) {
+  if (!allKeywords.includes(keyword)) {
+    allKeywords.push(keyword);
+  }
+}
+
 function filterAnimals(keyword) {
   const chosenAnimals = [];
   animalsOnPage.forEach(animal => {
@@ -31,10 +36,11 @@ function filterAnimals(keyword) {
   return chosenAnimals;
 }
 
-function addKeyword(keyword) {
-  if (!allKeywords.includes(keyword)) {
-    allKeywords.push(keyword);
-  }
+function renderAnimals(animals) {
+  $('#cards').empty();
+  animals.forEach(animal => {
+    animal.render();
+  });
 }
 
 function renderFilter() {
@@ -48,29 +54,33 @@ function renderFilter() {
       renderAnimals(filterAnimals(this.value));
     }
   });
+  jsonDataLinks.forEach((link, index) => {
+    $('#pageButtons').append(`<button type="button" value=${index}>Animal Set ${index + 1}</button>`);
+  });
+  $('#pageButtons').on('click', event => {
+    animalsOnPage = animalDataSets[event.target.value];
+    console.log(animalsOnPage);
+    renderAnimals(animalsOnPage);
+  });
+
 }
 
 function loadAnimals() {
-  jsonDataLinks.forEach(dataLink => {
+  let loaded = 0;
+  jsonDataLinks.forEach((dataLink, index) => {
     $.get(dataLink).then(data => {
+      loaded++;
       const animalSet = [];
       data.forEach(animal => {
         animalSet.push(new Animal(animal));
       });
-      animalDataSets.push(animalSet);
+      animalDataSets[index] = (animalSet);
+      if (loaded >= jsonDataLinks.length) {
+        animalsOnPage = animalDataSets[0];
+        renderFilter();
+        renderAnimals(animalsOnPage);
+      }
     });
-  }).then(() => {
-    animalsOnPage = animalDataSets[0];
-    renderFilter();
-    renderDataButtons();
-    renderAnimals(animalsOnPage);
-  });
-}
-
-function renderAnimals(animals) {
-  $('#cards').empty();
-  animals.forEach(animal => {
-    animal.render();
   });
 }
 
