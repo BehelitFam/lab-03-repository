@@ -2,7 +2,8 @@
 
 const allAnimals = [];
 const allKeywords = [];
-
+const source = $('#card-template').html();
+const template = Handlebars.compile(source);
 
 function Animal (animal) {
   this.url = animal.image_url;
@@ -16,15 +17,21 @@ function Animal (animal) {
 }
 
 Animal.prototype.render = function() {
-  $('#cards').append('<div class="clone"></div>');
-  let $animalCard = $('div[class="clone"]');
-  $animalCard.html($('#card-template').html());
+  
+  $('#cards').append(template(this));
 
-  $animalCard.find('h2').text(this.title);
-  $animalCard.find('img').attr('src', this.url);
-  $animalCard.find('p').text(this.description);
-  $animalCard.attr('class', 'animalCard ' + this.keyword);
-  console.log($animalCard.find('h2').text());
+
+
+
+  // $('#cards').append('<div class="clone"></div>');
+  // let $animalCard = $('div[class="clone"]');
+  // $animalCard.html($('#card-template').html());
+
+  // $animalCard.find('h2').text(this.title);
+  // $animalCard.find('img').attr('src', this.url);
+  // $animalCard.find('p').text(this.description);
+  // $animalCard.attr('class', 'animalCard ' + this.keyword);
+  // console.log($animalCard.find('h2').text());
 
 }
 
@@ -79,4 +86,5 @@ function renderAnimals(animals) {
 
 // loadAnimals();
 $(() => loadAnimals());
+
 
